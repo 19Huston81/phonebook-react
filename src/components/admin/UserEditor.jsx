@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 /**
  * Компактная форма редактирования/добавления сотрудника
+ * с каскадным выбором: Филиал → Отдел → Подотдел
  */
 export const UserEditor = ({
   user,
@@ -11,6 +12,8 @@ export const UserEditor = ({
   onCancel,
 }) => {
   const [formData, setFormData] = useState({
+    filial_id: "",
+    parent_id: "",
     department_id: "",
     sort: 0,
     fio: "",
@@ -23,9 +26,20 @@ export const UserEditor = ({
     active: true,
   });
 
+  // Заполняем форму при редактировании существующего сотрудника
   useEffect(() => {
     if (user) {
+      // Определяем филиал и родительский отдел из текущего отдела
+      const currentDept = departments.find((d) => d.id === user.department_id);
+      const filialId = currentDept?.filial_id || "";
+      const parentId =
+        currentDept?.parent_id === 0
+          ? currentDept?.id || ""
+          : currentDept?.parent_id || "";
+
       setFormData({
+        filial_id: filialId,
+        parent_id: parentId,
         department_id: user.department_id || "",
         sort: user.sort || 0,
         fio: user.fio || "",
@@ -38,36 +52,85 @@ export const UserEditor = ({
         active: user.active !== false,
       });
     }
-  }, [user]);
+  }, [user, departments]);
 
-  // Определяем филиал выбранного отдела
-  const selectedDepartment = departments.find(
-    (d) => d.id === Number(formData.department_id),
-  );
-  const selectedFilialId = selectedDepartment?.filial_id || "";
-
-  // Филиалы отсортированные
+  // Отсортированные филиалы
   const sortedFilials = [...filials].sort((a, b) => a.sort - b.sort);
 
-  // Отделы выбранного филиала (только родительские)
+  // Родительские отделы выбранного филиала
   const parentDepartments = departments
-    .filter((d) => d.filial_id === selectedFilialId && d.parent_id === 0)
+    .filter(
+      (d) => d.filial_id === Number(formData.filial_id) && d.parent_id === 0,
+    )
     .sort((a, b) => a.sort - b.sort);
 
   // Подотделы выбранного родительского отдела
-  const selectedParentId = selectedDepartment?.parent_id || 0;
-  const childDepartments =
-    selectedParentId === 0
-      ? []
-      : departments
-          .filter((d) => d.parent_id === selectedParentId)
-          .sort((a, b) => a.sort - b.sort);
+  const childDepartments = formData.parent_id
+    ? departments
+        .filter((d) => d.parent_id === Number(formData.parent_id))
+        .sort((a, b) => a.sort - b.sort)
+    : [];
+
+  // Проверка: является ли текущий отдел подотделом
+  const selectedDept = departments.find(
+    (d) => d.id === Number(formData.department_id),
+  );
+  const isChildSelected = selectedDept && selectedDept.parent_id !== 0;
+
+  // Обработчик выбора филиала
+  const handleFilialChange = (filialId) => {
+    setFormData({
+      ...formData,
+      filial_id: filialId,
+      parent_id: "", // сбрасываем отдел
+      department_id: "", // сбрасываем итоговый отдел
+    });
+  };
+
+  // Обработчик выбора родительского отдела
+  const handleParentChange = (parentId) => {
+    if (!parentId) {
+      setFormData({
+        ...formData,
+        parent_id: "",
+        department_id: "",
+      });
+      return;
+    }
+
+    const pid = Number(parentId);
+    const children = departments.filter((d) => d.parent_id === pid);
+
+    if (children.length === 0) {
+      // Если нет подотделов — выбираем сам родительский отдел
+      setFormData({
+        ...formData,
+        parent_id: parentId,
+        department_id: parentId,
+      });
+    } else {
+      // Если есть подотделы — ждём выбора подотдела
+      setFormData({
+        ...formData,
+        parent_id: parentId,
+        department_id: "",
+      });
+    }
+  };
+
+  // Обработчик выбора подотдела
+  const handleChildChange = (childId) => {
+    setFormData({
+      ...formData,
+      department_id: childId,
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!formData.department_id) {
-      alert("Выберите отдел");
+      alert("Выберите отдел сотрудника");
       return;
     }
 
@@ -91,19 +154,6 @@ export const UserEditor = ({
     });
   };
 
-  // Обработчик выбора отдела через каскад
-  const handleDepartmentSelect = (filialId, parentId, childId) => {
-    // Определяем итоговый department_id
-    let deptId = "";
-    if (childId) {
-      deptId = childId;
-    } else if (parentId) {
-      deptId = parentId;
-    }
-
-    setFormData({ ...formData, department_id: deptId });
-  };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       {/* Активность */}
@@ -123,11 +173,10 @@ export const UserEditor = ({
               formData.active ? "translate-x-4.5" : "translate-x-0.5"
             }`}
           />
-          <span className="sr-only">Активен</span>
         </button>
       </div>
 
-      {/* Выбор отдела каскадом */}
+      {/* Каскадный выбор отдела */}
       <div>
         <label className="block text-xs font-medium text-gray-700 mb-1">
           Отдел сотрудника *
@@ -135,11 +184,8 @@ export const UserEditor = ({
         <div className="grid grid-cols-3 gap-2">
           {/* Филиал */}
           <select
-            value={selectedFilialId}
-            onChange={(e) => {
-              // При смене филиала сбрасываем отдел
-              setFormData({ ...formData, department_id: "" });
-            }}
+            value={formData.filial_id}
+            onChange={(e) => handleFilialChange(e.target.value)}
             className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">— Филиал —</option>
@@ -152,20 +198,12 @@ export const UserEditor = ({
 
           {/* Родительский отдел */}
           <select
-            value={selectedParentId}
-            onChange={(e) => {
-              const parentId = Number(e.target.value);
-              if (parentId === 0) {
-                setFormData({ ...formData, department_id: "" });
-              } else {
-                // Автоматически выбираем родительский отдел
-                setFormData({ ...formData, department_id: parentId });
-              }
-            }}
-            disabled={!selectedFilialId}
+            value={formData.parent_id}
+            onChange={(e) => handleParentChange(e.target.value)}
+            disabled={!formData.filial_id}
             className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
           >
-            <option value={0}>— Отдел —</option>
+            <option value="">— Отдел —</option>
             {parentDepartments.map((parent) => (
               <option key={parent.id} value={parent.id}>
                 {parent.name || "(без названия)"}
@@ -175,18 +213,9 @@ export const UserEditor = ({
 
           {/* Подотдел */}
           <select
-            value={
-              selectedDepartment?.parent_id !== 0
-                ? selectedDepartment?.id || ""
-                : ""
-            }
-            onChange={(e) => {
-              setFormData({
-                ...formData,
-                department_id: Number(e.target.value),
-              });
-            }}
-            disabled={!selectedParentId || childDepartments.length === 0}
+            value={isChildSelected ? formData.department_id : ""}
+            onChange={(e) => handleChildChange(e.target.value)}
+            disabled={!formData.parent_id || childDepartments.length === 0}
             className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
           >
             <option value="">— Подотдел —</option>
@@ -197,9 +226,12 @@ export const UserEditor = ({
             ))}
           </select>
         </div>
-        {selectedDepartment && (
+
+        {/* Подсказка о выбранном отделе */}
+        {selectedDept && (
           <p className="text-xs text-green-700 mt-1">
-            ✓ Выбран: {selectedDepartment.name || "(без названия)"}
+            ✓ Выбран отдел:{" "}
+            <strong>{selectedDept.name || "(без названия)"}</strong>
           </p>
         )}
       </div>

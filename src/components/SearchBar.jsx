@@ -27,7 +27,7 @@ export const SearchBar = ({ onSearch }) => {
         type="text"
         value={query}
         onChange={handleChange}
-        placeholder="Поиск по ФИО, мобильному телефону или email..."
+        placeholder="Поиск по ФИО, должности, телефонам или email..."
         className="w-full pl-12 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500"
       />
       {query && (

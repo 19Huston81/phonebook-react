@@ -15,10 +15,37 @@ import {
 export const EmployeeCard = ({ user }) => {
   const [copied, setCopied] = useState(false);
 
+  /**
+   * Универсальное копирование в буфер обмена
+   * Работает и по HTTPS (через navigator.clipboard),
+   * и по HTTP (через фолбэк на execCommand)
+   */
   const copyToClipboard = async (text) => {
     if (!text) return;
+
     try {
-      await navigator.clipboard.writeText(text);
+      // Вариант 1: современный API (работает по HTTPS и localhost)
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        // Вариант 2: фолбэк через временный textarea (работает везде)
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        textarea.style.left = "-9999px";
+        textarea.style.top = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        try {
+          document.execCommand("copy");
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      }
+
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -62,7 +89,7 @@ export const EmployeeCard = ({ user }) => {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-sm transition-shadow">
+    <div className="border border-gray-400 rounded-lg p-3 bg-gray-100 hover:shadow-md transition-all duration-200 hover:border-blue-300">
       {/* Заголовок: ФИО и должность */}
       <div className="mb-2 pb-2 border-b border-gray-100">
         {user.fio ? (

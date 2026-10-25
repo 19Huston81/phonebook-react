@@ -1,52 +1,113 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { usePhonebookData } from "../hooks/usePhonebookData";
+import { fetchAllData } from "../utils/api";
 
-// Создаём контекст
 const DataContext = createContext();
 
 /**
  * Провайдер данных справочника
+ * Пытается загрузить данные с сервера, при недоступности — из статических файлов
  */
 export const DataProvider = ({ children }) => {
-  const { data, loading, error, refetch } = usePhonebookData();
-
-  // Рабочая копия данных (будет изменяться в админке)
   const [filials, setFilials] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [dataSource, setDataSource] = useState("server"); // 'server' | 'static'
 
-  // Синхронизируем рабочую копию с загруженными данными
   useEffect(() => {
-    if (data.filials.length > 0) {
-      setFilials(data.filials);
-      setDepartments(data.departments);
-      setUsers(data.users);
-    }
-  }, [data]);
+    loadData();
+  }, []);
 
-  // ===== CRUD для филиалов =====
-  const addFilial = (filial) => {
-    const newId = Math.max(...filials.map((f) => f.id), 0) + 1;
-    setFilials([...filials, { ...filial, id: newId }]);
+  /**
+   * Загрузка данных: сначала с сервера, затем из статических файлов
+   */
+  const loadData = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Пытаемся загрузить с сервера
+      const serverData = await fetchAllData();
+
+      if (serverData) {
+        setFilials(serverData.filials);
+        setDepartments(serverData.departments);
+        setUsers(serverData.users);
+        setDataSource("server");
+        console.log("✓ Данные загружены с сервера");
+      } else {
+        // Сервер недоступен — падаем на статические файлы
+        await loadStaticData();
+        setDataSource("static");
+        console.log("✓ Данные загружены из статических файлов");
+      }
+    } catch (err) {
+      console.error("Ошибка загрузки данных:", err);
+      setError("Не удалось загрузить данные справочника");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const updateFilial = (id, updates) => {
-    setFilials(filials.map((f) => (f.id === id ? { ...f, ...updates } : f)));
+  /**
+   * Загрузка из статических файлов (фоллбэк)
+   */
+  const loadStaticData = async () => {
+    const [filialsRes, departmentsRes, usersRes] = await Promise.all([
+      fetch("/data/filials.json"),
+      fetch("/data/departments.json"),
+      fetch("/data/users.json"),
+    ]);
+
+    if (!filialsRes.ok || !departmentsRes.ok || !usersRes.ok) {
+      throw new Error("Ошибка загрузки статических данных");
+    }
+
+    const [filialsData, departmentsData, usersData] = await Promise.all([
+      filialsRes.json(),
+      departmentsRes.json(),
+      usersRes.json(),
+    ]);
+
+    setFilials(filialsData);
+    setDepartments(departmentsData);
+    setUsers(usersData);
+  };
+
+  // CRUD для филиалов
+  const addFilial = (filial) => {
+    const newId =
+      filials.length > 0 ? Math.max(...filials.map((f) => f.id)) + 1 : 1;
+    const newFilial = { ...filial, id: newId };
+    setFilials([...filials, newFilial]);
+    return newFilial;
+  };
+
+  const updateFilial = (id, updatedData) => {
+    setFilials(
+      filials.map((f) => (f.id === id ? { ...f, ...updatedData } : f)),
+    );
   };
 
   const deleteFilial = (id) => {
     setFilials(filials.filter((f) => f.id !== id));
   };
 
-  // ===== CRUD для отделов =====
+  // CRUD для отделов
   const addDepartment = (department) => {
-    const newId = Math.max(...departments.map((d) => d.id), 0) + 1;
-    setDepartments([...departments, { ...department, id: newId }]);
+    const newId =
+      departments.length > 0
+        ? Math.max(...departments.map((d) => d.id)) + 1
+        : 1;
+    const newDepartment = { ...department, id: newId };
+    setDepartments([...departments, newDepartment]);
+    return newDepartment;
   };
 
-  const updateDepartment = (id, updates) => {
+  const updateDepartment = (id, updatedData) => {
     setDepartments(
-      departments.map((d) => (d.id === id ? { ...d, ...updates } : d)),
+      departments.map((d) => (d.id === id ? { ...d, ...updatedData } : d)),
     );
   };
 
@@ -54,75 +115,50 @@ export const DataProvider = ({ children }) => {
     setDepartments(departments.filter((d) => d.id !== id));
   };
 
-  // ===== CRUD для сотрудников =====
+  // CRUD для пользователей
   const addUser = (user) => {
-    const newId = Math.max(...users.map((u) => u.id), 0) + 1;
-    setUsers([...users, { ...user, id: newId }]);
+    const newId =
+      users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1;
+    const newUser = { ...user, id: newId };
+    setUsers([...users, newUser]);
+    return newUser;
   };
 
-  const updateUser = (id, updates) => {
-    setUsers(users.map((u) => (u.id === id ? { ...u, ...updates } : u)));
+  const updateUser = (id, updatedData) => {
+    setUsers(users.map((u) => (u.id === id ? { ...u, ...updatedData } : u)));
   };
 
   const deleteUser = (id) => {
     setUsers(users.filter((u) => u.id !== id));
   };
 
-  // Метод для получения всех данных (для экспорта в JSON)
-  const getAllData = () => ({
-    filials,
-    departments,
-    users,
-  });
-
-  // Метод для обновления всех данных (для импорта из JSON)
-  const setAllData = (newData) => {
-    if (newData.filials) setFilials(newData.filials);
-    if (newData.departments) setDepartments(newData.departments);
-    if (newData.users) setUsers(newData.users);
+  // Массовое обновление всех данных (используется при загрузке с сервера)
+  const setAllData = (data) => {
+    setFilials(data.filials);
+    setDepartments(data.departments);
+    setUsers(data.users);
   };
 
   const value = {
-    // Данные
     filials,
     departments,
     users,
-
-    // Состояния загрузки
     loading,
     error,
-    refetch,
-
-    // CRUD для филиалов
+    dataSource,
+    setAllData,
     addFilial,
     updateFilial,
     deleteFilial,
-
-    // CRUD для отделов
     addDepartment,
     updateDepartment,
     deleteDepartment,
-
-    // CRUD для сотрудников
     addUser,
     updateUser,
     deleteUser,
-
-    // Глобальные методы
-    getAllData,
-    setAllData,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
 
-/**
- * Хук для использования контекста данных
- */
-export const useData = () => {
-  const context = useContext(DataContext);
-  if (!context) {
-    throw new Error("useData must be used within DataProvider");
-  }
-  return context;
-};
+export const useData = () => useContext(DataContext);

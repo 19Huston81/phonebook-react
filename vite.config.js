@@ -3,8 +3,15 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "./", // 👈 ВАЖНО для локального использования
+  base: "./",
   server: {
     port: 3000,
+    // Проксирование запросов /api/* на сервер данных
+    proxy: {
+      "/api": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
+    },
   },
 });

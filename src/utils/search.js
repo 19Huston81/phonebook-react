@@ -11,12 +11,18 @@ export const normalizeForSearch = (text) => {
 
 /**
  * Проверяет, соответствует ли сотрудник поисковому запросу
- * Ищет совпадения в: fio, phone_mobile, email
+ * Ищет совпадения в: fio, position, phone_local, phone_mobile, email
  */
 export const matchesSearch = (user, normalizedQuery) => {
   if (!normalizedQuery) return true;
 
-  const fieldsToSearch = [user.fio, user.phone_mobile, user.email];
+  const fieldsToSearch = [
+    user.fio, // ФИО
+    user.position, // Должность
+    user.phone_local, // Местный номер
+    user.phone_mobile, // Мобильный номер
+    user.email, // E-mail
+  ];
 
   return fieldsToSearch.some((field) => {
     if (!field) return false;

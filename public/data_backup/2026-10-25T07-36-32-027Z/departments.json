@@ -1,0 +1,1010 @@
+[
+  {
+    "id": 1,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 10,
+    "name": "Руководство",
+    "intro": null
+  },
+  {
+    "id": 2,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 20,
+    "name": "Исполнительный аппарат АО \"Чукотэнерго\"",
+    "intro": null
+  },
+  {
+    "id": 3,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 30,
+    "name": "Отдел бухгалтерского и налогового учета",
+    "intro": null
+  },
+  {
+    "id": 6,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 60,
+    "name": "Производственно-технический отдел (ПТО)",
+    "intro": null
+  },
+  {
+    "id": 8,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 80,
+    "name": "Отдел складского учета и материально-технического снабжения (ОМТС)",
+    "intro": null
+  },
+  {
+    "id": 9,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 90,
+    "name": "Отдел надежности, промышленной безопасности и охраны труда (ОНПБиОТ)",
+    "intro": null
+  },
+  {
+    "id": 11,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 110,
+    "name": "Котлотурбинный цех (КТЦ)",
+    "intro": null
+  },
+  {
+    "id": 12,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 120,
+    "name": "Электроцех (ЭЦ)",
+    "intro": null
+  },
+  {
+    "id": 13,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 130,
+    "name": "Участок информатизации и связи",
+    "intro": null
+  },
+  {
+    "id": 15,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 150,
+    "name": "Химическая лаборатория",
+    "intro": null
+  },
+  {
+    "id": 16,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 160,
+    "name": "Топливно-транспортный цех",
+    "intro": null
+  },
+  {
+    "id": 17,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 170,
+    "name": "Цех обеспечения ремонтов",
+    "intro": null
+  },
+  {
+    "id": 20,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 200,
+    "name": "Отдел управления делами",
+    "intro": null
+  },
+  {
+    "id": 21,
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 210,
+    "name": "Прочие подразделения",
+    "intro": null
+  },
+  {
+    "id": 22,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 10,
+    "name": "Руководство",
+    "intro": null
+  },
+  {
+    "id": 23,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 20,
+    "name": "Управление по стратегическому развитию и инвестициям",
+    "intro": null
+  },
+  {
+    "id": 24,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 30,
+    "name": "Управление по обеспечению ресурсами",
+    "intro": null
+  },
+  {
+    "id": 25,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 40,
+    "name": "Управление сбыта и реализации энергии",
+    "intro": null
+  },
+  {
+    "id": 26,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 50,
+    "name": "Управление по экономике и финансам",
+    "intro": null
+  },
+  {
+    "id": 27,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 60,
+    "name": "Отдел экономической безопасности и режима",
+    "intro": null
+  },
+  {
+    "id": 28,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 70,
+    "name": "Отдел корпоративного управления и имущественных отношений",
+    "intro": "Сотовый телефон отдела: +7 (924) 669-18-48"
+  },
+  {
+    "id": 29,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 80,
+    "name": "Юридический отдел",
+    "intro": null
+  },
+  {
+    "id": 30,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 90,
+    "name": "Управление по работе с персоналом",
+    "intro": null
+  },
+  {
+    "id": 31,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 100,
+    "name": "Отдел бухгалтерского и налогового учета и отчетности",
+    "intro": "Сотовый телефон отдела: +7 (924) 665-10-55"
+  },
+  {
+    "id": 33,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 120,
+    "name": "Казначейство",
+    "intro": null
+  },
+  {
+    "id": 34,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 130,
+    "name": "Отдел документационного и хозяйственного обеспечения",
+    "intro": null
+  },
+  {
+    "id": 35,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 140,
+    "name": "Производственно-технический отдел",
+    "intro": null
+  },
+  {
+    "id": 36,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 150,
+    "name": "Электротехнический отдел",
+    "intro": null
+  },
+  {
+    "id": 37,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 160,
+    "name": "Отдел информационных технологий и связи",
+    "intro": null
+  },
+  {
+    "id": 38,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 170,
+    "name": "Отдел охраны труда, промышленной и экологической безопасности",
+    "intro": null
+  },
+  {
+    "id": 39,
+    "filial_id": 5,
+    "parent_id": 0,
+    "sort": 180,
+    "name": "Отдел подготовки и проведения ремонтов",
+    "intro": null
+  },
+  {
+    "id": 40,
+    "filial_id": 5,
+    "parent_id": 23,
+    "sort": 10,
+    "name": null,
+    "intro": null
+  },
+  {
+    "id": 41,
+    "filial_id": 5,
+    "parent_id": 23,
+    "sort": 20,
+    "name": "Отдел стратегического развития",
+    "intro": null
+  },
+  {
+    "id": 42,
+    "filial_id": 5,
+    "parent_id": 23,
+    "sort": 30,
+    "name": "Отдел технического перевооружения и нового строительства",
+    "intro": null
+  },
+  {
+    "id": 43,
+    "filial_id": 5,
+    "parent_id": 24,
+    "sort": 10,
+    "name": null,
+    "intro": null
+  },
+  {
+    "id": 44,
+    "filial_id": 5,
+    "parent_id": 24,
+    "sort": 20,
+    "name": "Отдел закупок и материально-технического снабжения",
+    "intro": "Сотовый телефон отдела: +7 (924) 665-10-60"
+  },
+  {
+    "id": 45,
+    "filial_id": 5,
+    "parent_id": 24,
+    "sort": 30,
+    "name": "Отдел топливообеспечения",
+    "intro": "Сотовый телефон отдела: +7 (924) 665-17-70"
+  },
+  {
+    "id": 46,
+    "filial_id": 5,
+    "parent_id": 25,
+    "sort": 10,
+    "name": null,
+    "intro": null
+  },
+  {
+    "id": 47,
+    "filial_id": 5,
+    "parent_id": 25,
+    "sort": 20,
+    "name": "Отдел сбыта",
+    "intro": "Сотовый телефон отдела: +7 (924) 665-10-59"
+  },
+  {
+    "id": 48,
+    "filial_id": 5,
+    "parent_id": 25,
+    "sort": 30,
+    "name": "Отдел реализации энергии",
+    "intro": "Сотовый телефон отдела: +7 (924) 665-10-59"
+  },
+  {
+    "id": 49,
+    "filial_id": 5,
+    "parent_id": 26,
+    "sort": 10,
+    "name": null,
+    "intro": null
+  },
+  {
+    "id": 50,
+    "filial_id": 5,
+    "parent_id": 26,
+    "sort": 20,
+    "name": "Отдел экономики производства",
+    "intro": "Сотовый телефон отдела: +7 (924) 667-10-50"
+  },
+  {
+    "id": 51,
+    "filial_id": 5,
+    "parent_id": 26,
+    "sort": 30,
+    "name": "Финансовый отдел",
+    "intro": "Сотовый телефон отдела: +7 (924) 665-10-66"
+  },
+  {
+    "id": 52,
+    "filial_id": 5,
+    "parent_id": 27,
+    "sort": 10,
+    "name": null,
+    "intro": null
+  },
+  {
+    "id": 53,
+    "filial_id": 5,
+    "parent_id": 27,
+    "sort": 20,
+    "name": "Режимно-секретная группа",
+    "intro": null
+  },
+  {
+    "id": 54,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 10,
+    "name": "Административно-управленческий аппарат. Руководство и аппарат при нем",
+    "intro": null
+  },
+  {
+    "id": 55,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 20,
+    "name": "Группа безопасности",
+    "intro": null
+  },
+  {
+    "id": 56,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 30,
+    "name": "Бухгалтерия",
+    "intro": null
+  },
+  {
+    "id": 57,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 40,
+    "name": "Финансово-экономический отдел",
+    "intro": null
+  },
+  {
+    "id": 58,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 50,
+    "name": "Производственно-технический отдел",
+    "intro": null
+  },
+  {
+    "id": 59,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 60,
+    "name": "Отдел материально-технического снабжения",
+    "intro": null
+  },
+  {
+    "id": 60,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 70,
+    "name": "Отдел сбыта и реализации энергии",
+    "intro": null
+  },
+  {
+    "id": 61,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 80,
+    "name": "Отдел охраны труда и промышленной безопасности",
+    "intro": null
+  },
+  {
+    "id": 62,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 90,
+    "name": "Группа юридического обеспечения",
+    "intro": null
+  },
+  {
+    "id": 63,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 100,
+    "name": "Группа по работе с персоналом",
+    "intro": null
+  },
+  {
+    "id": 64,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 110,
+    "name": "Группа хозяйственного обслуживания",
+    "intro": null
+  },
+  {
+    "id": 65,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 120,
+    "name": "Котлотурбинный цех",
+    "intro": null
+  },
+  {
+    "id": 66,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 130,
+    "name": "Химический цех",
+    "intro": null
+  },
+  {
+    "id": 67,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 140,
+    "name": "Электроцех",
+    "intro": null
+  },
+  {
+    "id": 68,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 150,
+    "name": "Топливо-транспортный цех",
+    "intro": null
+  },
+  {
+    "id": 69,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 160,
+    "name": "Цех тепловой автоматики и измерений",
+    "intro": null
+  },
+  {
+    "id": 70,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 170,
+    "name": "Цех тепловодоснабжения",
+    "intro": null
+  },
+  {
+    "id": 71,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 180,
+    "name": "Главный щит управления",
+    "intro": null
+  },
+  {
+    "id": 72,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 190,
+    "name": "Участок информатизации и связи",
+    "intro": null
+  },
+  {
+    "id": 73,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 200,
+    "name": "Участок электрических сетей",
+    "intro": null
+  },
+  {
+    "id": 74,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 210,
+    "name": "Ремонтно-строительная группа",
+    "intro": null
+  },
+  {
+    "id": 75,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 220,
+    "name": "Дизельная электростанция",
+    "intro": null
+  },
+  {
+    "id": 76,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 230,
+    "name": "Группа режима",
+    "intro": null
+  },
+  {
+    "id": 77,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 240,
+    "name": "ГМ ТЭЦ",
+    "intro": null
+  },
+  {
+    "id": 78,
+    "filial_id": 6,
+    "parent_id": 0,
+    "sort": 250,
+    "name": "Прочее",
+    "intro": null
+  },
+  {
+    "id": 79,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 10,
+    "name": "Управление",
+    "intro": null
+  },
+  {
+    "id": 80,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 20,
+    "name": "Служба надежности",
+    "intro": null
+  },
+  {
+    "id": 81,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 30,
+    "name": "Юридический отдел",
+    "intro": null
+  },
+  {
+    "id": 82,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 40,
+    "name": "Бухгалтерия",
+    "intro": null
+  },
+  {
+    "id": 83,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 50,
+    "name": "Финансово-экономический отдел",
+    "intro": null
+  },
+  {
+    "id": 84,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 60,
+    "name": "Производственно-технический отдел",
+    "intro": null
+  },
+  {
+    "id": 85,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 70,
+    "name": "ВСЭБР, ГО и ЧС",
+    "intro": null
+  },
+  {
+    "id": 86,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 80,
+    "name": "Отдел материально-технического снабжения",
+    "intro": null
+  },
+  {
+    "id": 87,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 90,
+    "name": "Отдел сбыта и реализации энергии",
+    "intro": null
+  },
+  {
+    "id": 88,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 100,
+    "name": "МС СДТУ",
+    "intro": null
+  },
+  {
+    "id": 89,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 110,
+    "name": "МС РЗАИ",
+    "intro": null
+  },
+  {
+    "id": 90,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 120,
+    "name": "РСГ",
+    "intro": null
+  },
+  {
+    "id": 91,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 130,
+    "name": "Автотранспортный цех",
+    "intro": null
+  },
+  {
+    "id": 92,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 140,
+    "name": "ВЛ",
+    "intro": null
+  },
+  {
+    "id": 93,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 150,
+    "name": "ПС и ТП",
+    "intro": null
+  },
+  {
+    "id": 94,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 160,
+    "name": "ОДГ",
+    "intro": null
+  },
+  {
+    "id": 95,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 170,
+    "name": "ОВБ",
+    "intro": null
+  },
+  {
+    "id": 96,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 180,
+    "name": "ОДС",
+    "intro": null
+  },
+  {
+    "id": 97,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 190,
+    "name": "Вычислительный центр",
+    "intro": null
+  },
+  {
+    "id": 98,
+    "filial_id": 8,
+    "parent_id": 0,
+    "sort": 200,
+    "name": "Вспомогательные производственные подразделения",
+    "intro": null
+  },
+  {
+    "id": 99,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 10,
+    "name": "Управление",
+    "intro": null
+  },
+  {
+    "id": 100,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 20,
+    "name": "Бухгалтерия",
+    "intro": null
+  },
+  {
+    "id": 101,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 30,
+    "name": "Отдел акционерного капитала, имущественных и корпоративных отношений",
+    "intro": null
+  },
+  {
+    "id": 102,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 40,
+    "name": "Производственно-технический отдел",
+    "intro": null
+  },
+  {
+    "id": 103,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 50,
+    "name": "Отдел материально-технического снабжения",
+    "intro": null
+  },
+  {
+    "id": 104,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 60,
+    "name": "Отдел сбыта электроэнергии",
+    "intro": null
+  },
+  {
+    "id": 105,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 70,
+    "name": "РЗАИ",
+    "intro": null
+  },
+  {
+    "id": 106,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 80,
+    "name": "ОДГ и ПС",
+    "intro": null
+  },
+  {
+    "id": 107,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 90,
+    "name": "СДТУ",
+    "intro": null
+  },
+  {
+    "id": 108,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 100,
+    "name": "Автотранспортный цех",
+    "intro": null
+  },
+  {
+    "id": 109,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 110,
+    "name": "РСГ",
+    "intro": null
+  },
+  {
+    "id": 110,
+    "filial_id": 9,
+    "parent_id": 0,
+    "sort": 120,
+    "name": "Мастера",
+    "intro": null
+  },
+  {
+    "id": 111,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 10,
+    "name": "Управление",
+    "intro": null
+  },
+  {
+    "id": 112,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 20,
+    "name": "Бухгалтерия",
+    "intro": null
+  },
+  {
+    "id": 113,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 30,
+    "name": "Главный щит управления",
+    "intro": null
+  },
+  {
+    "id": 114,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 40,
+    "name": "Финансово-экономический отдел",
+    "intro": null
+  },
+  {
+    "id": 115,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 50,
+    "name": "Производственно-технический отдел",
+    "intro": null
+  },
+  {
+    "id": 116,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 60,
+    "name": "Отдел управления персоналом",
+    "intro": null
+  },
+  {
+    "id": 117,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 70,
+    "name": "Отдел охраны труда, промышленной, пожарной и экологической безопасности",
+    "intro": null
+  },
+  {
+    "id": 118,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 80,
+    "name": "Котло-турбинный цех",
+    "intro": null
+  },
+  {
+    "id": 119,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 90,
+    "name": "Химическая лаборатория",
+    "intro": null
+  },
+  {
+    "id": 120,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 100,
+    "name": "Отдел материально-технического снабжения",
+    "intro": null
+  },
+  {
+    "id": 121,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 110,
+    "name": "Отдел сбыта и реализации энергии",
+    "intro": null
+  },
+  {
+    "id": 122,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 120,
+    "name": "Электроцех",
+    "intro": null
+  },
+  {
+    "id": 123,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 130,
+    "name": "Участок транспорта и прочих производств",
+    "intro": null
+  },
+  {
+    "id": 124,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 140,
+    "name": "Ремонтно-строительный участок",
+    "intro": null
+  },
+  {
+    "id": 125,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 150,
+    "name": "Административно-хозяйственный отдел",
+    "intro": null
+  },
+  {
+    "id": 126,
+    "filial_id": 10,
+    "parent_id": 0,
+    "sort": 160,
+    "name": "Военизированная охрана",
+    "intro": null
+  },
+  {
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 15,
+    "name": "Начальник смены электростанции",
+    "intro": null,
+    "id": 127
+  },
+  {
+    "filial_id": 7,
+    "parent_id": 2,
+    "sort": 10,
+    "name": "Группа планирования, подбора, обучения и развития персонала",
+    "intro": null,
+    "id": 128
+  },
+  {
+    "filial_id": 7,
+    "parent_id": 2,
+    "sort": 20,
+    "name": "Отдел безопасности",
+    "intro": null,
+    "id": 129
+  },
+  {
+    "filial_id": 7,
+    "parent_id": 2,
+    "sort": 30,
+    "name": "ОМТС АО \"Чукотэнерго\"",
+    "intro": null,
+    "id": 130
+  },
+  {
+    "filial_id": 7,
+    "parent_id": 12,
+    "sort": 10,
+    "name": "Электротехническая лаборатория",
+    "intro": null,
+    "id": 131
+  },
+  {
+    "filial_id": 7,
+    "parent_id": 0,
+    "sort": 125,
+    "name": "Цех тепловой автоматики и измерений",
+    "intro": null,
+    "id": 132
+  },
+  {
+    "filial_id": 7,
+    "parent_id": 16,
+    "sort": 10,
+    "name": "Участок транспорта",
+    "intro": null,
+    "id": 133
+  },
+  {
+    "filial_id": 7,
+    "parent_id": 16,
+    "sort": 20,
+    "name": "Участок топливоподачи",
+    "intro": null,
+    "id": 134
+  }
+]

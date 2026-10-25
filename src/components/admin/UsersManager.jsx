@@ -80,6 +80,7 @@ export const UsersManager = () => {
   const hierarchicalData = useMemo(() => {
     const result = {};
 
+    // Шаг 1: Создаём структуру для всех филиалов
     filials.forEach((f) => {
       result[f.id] = {
         filial: f,
@@ -87,6 +88,37 @@ export const UsersManager = () => {
       };
     });
 
+    // Шаг 2: Добавляем ВСЕ родительские отделы (даже пустые)
+    departments.forEach((dept) => {
+      const filialId = dept.filial_id;
+      if (!result[filialId]) return;
+
+      if (dept.parent_id === 0) {
+        result[filialId].parentDepts[dept.id] = {
+          parentDept: dept,
+          directUsers: [],
+          childDepts: {},
+        };
+      }
+    });
+
+    // Шаг 3: Добавляем ВСЕ подотделы к их родителям (даже пустые)
+    departments.forEach((dept) => {
+      const filialId = dept.filial_id;
+      if (!result[filialId]) return;
+
+      if (dept.parent_id !== 0) {
+        const parentGroup = result[filialId].parentDepts[dept.parent_id];
+        if (parentGroup) {
+          parentGroup.childDepts[dept.id] = {
+            dept,
+            users: [],
+          };
+        }
+      }
+    });
+
+    // Шаг 4: Распределяем сотрудников по отделам
     users.forEach((user) => {
       const dept = departments.find((d) => d.id === user.department_id);
       if (!dept) return;
@@ -94,36 +126,20 @@ export const UsersManager = () => {
       const filialId = dept.filial_id;
       if (!result[filialId]) return;
 
-      // Определяем родительский отдел
-      const parentId = dept.parent_id === 0 ? dept.id : dept.parent_id;
-
-      if (!result[filialId].parentDepts[parentId]) {
-        const parentDept = departments.find((d) => d.id === parentId);
-        result[filialId].parentDepts[parentId] = {
-          parentDept,
-          directUsers: [], // Сотрудники самого родительского отдела
-          childDepts: {}, // Подотделы с их сотрудниками
-        };
-      }
-
-      const parentGroup = result[filialId].parentDepts[parentId];
-
       if (dept.parent_id === 0) {
-        // Сотрудник принадлежит родительскому отделу напрямую
-        parentGroup.directUsers.push(user);
-      } else {
-        // Сотрудник принадлежит подотделу
-        if (!parentGroup.childDepts[dept.id]) {
-          parentGroup.childDepts[dept.id] = {
-            dept,
-            users: [],
-          };
+        const parentGroup = result[filialId].parentDepts[dept.id];
+        if (parentGroup) {
+          parentGroup.directUsers.push(user);
         }
-        parentGroup.childDepts[dept.id].users.push(user);
+      } else {
+        const parentGroup = result[filialId].parentDepts[dept.parent_id];
+        if (parentGroup && parentGroup.childDepts[dept.id]) {
+          parentGroup.childDepts[dept.id].users.push(user);
+        }
       }
     });
 
-    // Сортировка пользователей
+    // Шаг 5: Сортировка пользователей внутри отделов
     Object.values(result).forEach((filialData) => {
       Object.values(filialData.parentDepts).forEach((parentGroup) => {
         parentGroup.directUsers.sort((a, b) => a.sort - b.sort);
@@ -582,8 +598,6 @@ export const UsersManager = () => {
                       return null;
                     }
 
-                    if (allUsersInGroup.length === 0) return null;
-
                     return (
                       <div
                         key={parentDept.id}
@@ -679,8 +693,6 @@ export const UsersManager = () => {
                               ) {
                                 return null;
                               }
-
-                              if (childGroup.users.length === 0) return null;
 
                               return (
                                 <div
