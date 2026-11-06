@@ -1,11 +1,17 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { fetchAllData } from "../utils/api";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
+import { fetchAllData, saveDataToServer } from "../utils/api";
 
 const DataContext = createContext();
 
 /**
- * Провайдер данных справочника
- * Пытается загрузить данные с сервера, при недоступности — из статических файлов
+ * Провайдер данных справочника с автоматическим сохранением
  */
 export const DataProvider = ({ children }) => {
   const [filials, setFilials] = useState([]);
@@ -13,21 +19,23 @@ export const DataProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [dataSource, setDataSource] = useState("server"); // 'server' | 'static'
+  const [dataSource, setDataSource] = useState("server");
+
+  // Состояние автосохранения
+  const [saveStatus, setSaveStatus] = useState("idle"); // 'idle' | 'saving' | 'saved' | 'error'
+  const [lastSavedAt, setLastSavedAt] = useState(null);
+  const saveTimerRef = useRef(null);
+  const isInitialLoadRef = useRef(true);
 
   useEffect(() => {
     loadData();
   }, []);
 
-  /**
-   * Загрузка данных: сначала с сервера, затем из статических файлов
-   */
   const loadData = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      // Пытаемся загрузить с сервера
       const serverData = await fetchAllData();
 
       if (serverData) {
@@ -37,7 +45,6 @@ export const DataProvider = ({ children }) => {
         setDataSource("server");
         console.log("✓ Данные загружены с сервера");
       } else {
-        // Сервер недоступен — падаем на статические файлы
         await loadStaticData();
         setDataSource("static");
         console.log("✓ Данные загружены из статических файлов");
@@ -47,12 +54,13 @@ export const DataProvider = ({ children }) => {
       setError("Не удалось загрузить данные справочника");
     } finally {
       setLoading(false);
+      // Отмечаем, что начальная загрузка завершена
+      setTimeout(() => {
+        isInitialLoadRef.current = false;
+      }, 100);
     }
   };
 
-  /**
-   * Загрузка из статических файлов (фоллбэк)
-   */
   const loadStaticData = async () => {
     const [filialsRes, departmentsRes, usersRes] = await Promise.all([
       fetch("/data/filials.json"),
@@ -73,6 +81,74 @@ export const DataProvider = ({ children }) => {
     setFilials(filialsData);
     setDepartments(departmentsData);
     setUsers(usersData);
+  };
+
+  // ===== Автосохранение с debounce =====
+  const triggerAutoSave = useCallback(() => {
+    // Не сохраняем при начальной загрузке
+    if (isInitialLoadRef.current) return;
+
+    // Сохраняем только если данные загружены с сервера
+    if (dataSource !== "server") return;
+
+    // Сбрасываем предыдущий таймер
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current);
+    }
+
+    // Устанавливаем новый таймер на 1.5 секунды
+    saveTimerRef.current = setTimeout(async () => {
+      setSaveStatus("saving");
+
+      const result = await saveDataToServer({ filials, departments, users });
+
+      if (result.success) {
+        setSaveStatus("saved");
+        setLastSavedAt(new Date());
+        console.log("✓ Данные автоматически сохранены");
+      } else {
+        setSaveStatus("error");
+        console.error("✗ Ошибка автосохранения:", result.message);
+      }
+
+      // Сбрасываем статус через 3 секунды
+      setTimeout(() => {
+        setSaveStatus("idle");
+      }, 3000);
+    }, 1500);
+  }, [filials, departments, users, dataSource]);
+
+  // Следим за изменениями данных и запускаем автосохранение
+  useEffect(() => {
+    triggerAutoSave();
+  }, [filials, departments, users]);
+
+  // Очистка таймера при размонтировании
+  useEffect(() => {
+    return () => {
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Ручное сохранение (для кнопки "Резервная копия")
+  const manualSave = async () => {
+    setSaveStatus("saving");
+    const result = await saveDataToServer({ filials, departments, users });
+
+    if (result.success) {
+      setSaveStatus("saved");
+      setLastSavedAt(new Date());
+    } else {
+      setSaveStatus("error");
+    }
+
+    setTimeout(() => {
+      setSaveStatus("idle");
+    }, 3000);
+
+    return result;
   };
 
   // CRUD для филиалов
@@ -132,7 +208,7 @@ export const DataProvider = ({ children }) => {
     setUsers(users.filter((u) => u.id !== id));
   };
 
-  // Массовое обновление всех данных (используется при загрузке с сервера)
+  // Массовое обновление всех данных
   const setAllData = (data) => {
     setFilials(data.filials);
     setDepartments(data.departments);
@@ -146,6 +222,8 @@ export const DataProvider = ({ children }) => {
     loading,
     error,
     dataSource,
+    saveStatus,
+    lastSavedAt,
     setAllData,
     addFilial,
     updateFilial,
@@ -156,6 +234,7 @@ export const DataProvider = ({ children }) => {
     addUser,
     updateUser,
     deleteUser,
+    manualSave,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

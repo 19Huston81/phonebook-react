@@ -105,10 +105,7 @@ app.post("/api/data", (req, res) => {
       });
     }
 
-    // Создаём резервную копию перед записью
-    createBackup();
-
-    // Записываем файлы
+    // Записываем файлы (без автоматической резервной копии)
     const success1 = writeJsonFile(FILES.filials, filials);
     const success2 = writeJsonFile(FILES.departments, departments);
     const success3 = writeJsonFile(FILES.users, users);
@@ -126,6 +123,23 @@ app.post("/api/data", (req, res) => {
   } catch (err) {
     console.error("Ошибка сохранения данных:", err);
     res.status(500).json({ error: "Внутренняя ошибка сервера" });
+  }
+});
+
+/**
+ * POST /api/backup — создать резервную копию без изменения данных
+ */
+app.post("/api/backup", (req, res) => {
+  try {
+    createBackup();
+    res.json({
+      success: true,
+      message: "Резервная копия создана",
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    console.error("Ошибка создания резервной копии:", err);
+    res.status(500).json({ error: "Не удалось создать резервную копию" });
   }
 });
 
@@ -172,5 +186,5 @@ app.listen(PORT, () => {
   console.log(`  GET  /api/health — проверка работы`);
   console.log(`  GET  /api/data   — получить все данные`);
   console.log(`  POST /api/data   — сохранить данные`);
-  console.log("========================================");
+  console.log(`  POST /api/backup — создать резервную копию`);
 });

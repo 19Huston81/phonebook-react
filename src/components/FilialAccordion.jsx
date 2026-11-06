@@ -15,6 +15,7 @@ export const FilialAccordion = () => {
 
   const [openFilialId, setOpenFilialId] = useState(null);
   const [openDeptId, setOpenDeptId] = useState(null);
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
 
   const filialRefs = useRef({});
   const deptRefs = useRef({});
@@ -46,6 +47,56 @@ export const FilialAccordion = () => {
     }
   }, [openDeptId]);
 
+  // Автоматическое отображение/скрытие липкого заголовка с гистерезисом
+  useEffect(() => {
+    if (!openDeptId) {
+      setShowStickyHeader(false);
+      return;
+    }
+
+    const STICKY_HEIGHT = 60; // высота липкого блока
+    const SHOW_OFFSET = 10; // дополнительный отступ для показа
+    const HIDE_OFFSET = 30; // дополнительный отступ для скрытия (гистерезис)
+
+    const handleScroll = () => {
+      const deptElement = deptRefs.current[openDeptId];
+      if (!deptElement) {
+        setShowStickyHeader(false);
+        return;
+      }
+
+      const rect = deptElement.getBoundingClientRect();
+
+      setShowStickyHeader((prev) => {
+        if (prev) {
+          // Если блок уже показан — скрываем только когда заголовок
+          // вернулся достаточно далеко вниз (гистерезис)
+          const shouldHide =
+            rect.top > STICKY_HEIGHT + HIDE_OFFSET ||
+            rect.bottom < STICKY_HEIGHT;
+          return !shouldHide;
+        } else {
+          // Если блок скрыт — показываем когда заголовок ушёл вверх
+          // с небольшим запасом (чтобы не дребезжал на границе)
+          const shouldShow =
+            rect.top < STICKY_HEIGHT - SHOW_OFFSET &&
+            rect.bottom > STICKY_HEIGHT + SHOW_OFFSET;
+          return shouldShow;
+        }
+      });
+    };
+
+    const timer = setTimeout(() => {
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      handleScroll();
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [openDeptId]);
+
   // 🎯 Вычисляем текст для липкого заголовка
   const activeFilial = filials.find((f) => f.id === openFilialId);
   const activeDept = openDeptId
@@ -63,18 +114,27 @@ export const FilialAccordion = () => {
     <div className="space-y-3">
       {/* 📌 ЛИПКИЙ ЗАГОЛОВОК КОНТЕКСТА */}
       {stickyLabel && (
-        <div className="sticky top-0 z-30 bg-blue-600 text-white px-4 py-3 shadow-lg flex items-center gap-2 rounded-b-lg mb-3 border-t border-blue-500">
+        <div
+          className={`sticky top-0 z-30 bg-blue-600 text-white px-4 py-3 shadow-lg flex items-center gap-2 rounded-b-lg mb-3 border-t border-blue-500 transition-all duration-300 ${
+            showStickyHeader
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-full pointer-events-none"
+          }`}
+        >
           <Navigation className="w-4 h-4 flex-shrink-0 animate-pulse" />
           <span className="font-medium text-sm truncate">{stickyLabel}</span>
 
-          {/* Кнопка быстрого закрытия */}
           <button
             onClick={() => {
-              setOpenFilialId(null);
-              setOpenDeptId(null);
+              if (openDeptId) {
+                setOpenDeptId(null);
+              } else {
+                setOpenFilialId(null);
+              }
+              setShowStickyHeader(false);
             }}
             className="ml-auto p-1 hover:bg-blue-700 rounded transition-colors"
-            title="Свернуть все"
+            title={openDeptId ? "Свернуть отдел" : "Свернуть филиал"}
           >
             <X className="w-4 h-4" />
           </button>
@@ -164,26 +224,62 @@ export const FilialAccordion = () => {
                             <ChevronRight className="w-4 h-4 flex-shrink-0" />
                           )}
                           <Users className="w-4 h-4 flex-shrink-0 text-blue-600" />
-                          <span className="font-semibold flex-1 text-sm">
+                          <span className="font-semibold text-sm flex-1">
                             {parentDept.name}
                           </span>
                         </button>
 
                         {isDeptOpen && (
                           <div className="p-4 bg-white border-t border-gray-100">
-                            {users
-                              .filter(
+                            {/* Описание отдела (аналогично филиалам) */}
+                            {parentDept.intro && (
+                              <div
+                                className="mb-4 p-3 bg-blue-50 border-l-4 border-blue-500 text-sm text-gray-700 rounded"
+                                dangerouslySetInnerHTML={{
+                                  __html: parentDept.intro,
+                                }}
+                              />
+                            )}
+
+                            {/* Собираем сотрудников:
+        - Прямые сотрудники родительского отдела
+        - Сотрудники подотделов без имени (объединяются) */}
+                            {(() => {
+                              // 1. Прямые сотрудники родительского отдела
+                              const directUsers = users.filter(
                                 (u) =>
                                   u.department_id === parentDept.id && u.active,
-                              )
-                              .sort((a, b) => a.sort - b.sort)
-                              .map((user) => (
+                              );
+
+                              // 2. Сотрудники подотделов без имени
+                              const usersFromNamelessChildren = childDepartments
+                                .filter((childDept) => !childDept.name)
+                                .flatMap((childDept) =>
+                                  users.filter(
+                                    (u) =>
+                                      u.department_id === childDept.id &&
+                                      u.active,
+                                  ),
+                                );
+
+                              // 3. Объединяем и сортируем по полю sort
+                              const mergedUsers = [
+                                ...directUsers,
+                                ...usersFromNamelessChildren,
+                              ].sort((a, b) => a.sort - b.sort);
+
+                              return mergedUsers.map((user) => (
                                 <div key={user.id} className="mb-2">
                                   <EmployeeCard user={user} />
                                 </div>
-                              ))}
+                              ));
+                            })()}
 
+                            {/* Отображаем только подотделы С ИМЕНЕМ */}
                             {childDepartments.map((childDept) => {
+                              // Пропускаем подотделы без имени (их сотрудники уже показаны выше)
+                              if (!childDept.name) return null;
+
                               const childUsers = users
                                 .filter(
                                   (u) =>
@@ -192,8 +288,8 @@ export const FilialAccordion = () => {
                                 )
                                 .sort((a, b) => a.sort - b.sort);
 
-                              if (!childDept.name || childUsers.length === 0)
-                                return null;
+                              // Пропускаем пустые подотделы
+                              if (childUsers.length === 0) return null;
 
                               return (
                                 <div
@@ -203,6 +299,14 @@ export const FilialAccordion = () => {
                                   <h4 className="font-bold text-blue-600 mb-1.5 text-sm">
                                     {childDept.name}
                                   </h4>
+                                  {childDept.intro && (
+                                    <div
+                                      className="text-xs text-gray-600 mb-2 leading-snug"
+                                      dangerouslySetInnerHTML={{
+                                        __html: childDept.intro,
+                                      }}
+                                    />
+                                  )}
                                   <div className="space-y-2">
                                     {childUsers.map((user) => (
                                       <EmployeeCard key={user.id} user={user} />

@@ -261,7 +261,25 @@ export const UsersManager = () => {
     if (editingUser) {
       updateUser(editingUser.id, userData);
     } else {
-      addUser(userData);
+      let finalData = { ...userData };
+
+      // Автозаполнение при пустом значении ИЛИ при нуле
+      if (!finalData.sort || Number(finalData.sort) === 0) {
+        const departmentId = finalData.department_id;
+        const sameDepartmentUsers = users.filter(
+          (u) => u.department_id === departmentId,
+        );
+        const maxSort =
+          sameDepartmentUsers.length > 0
+            ? Math.max(...sameDepartmentUsers.map((u) => u.sort || 0))
+            : 0;
+
+        finalData.sort = maxSort + 10;
+      } else {
+        finalData.sort = parseInt(finalData.sort);
+      }
+
+      addUser(finalData);
     }
     setIsModalOpen(false);
   };
@@ -402,6 +420,10 @@ export const UsersManager = () => {
           <span>{user.active ? "Акт." : "Неакт."}</span>
         </button>
       </td>
+      {/* Колонка сортировки */}
+      <td className="px-3 py-2 text-center text-xs text-gray-500">
+        {user.sort}
+      </td>
       <td className="px-3 py-2 text-right w-24">
         <div className="flex items-center justify-end gap-1">
           <button
@@ -427,18 +449,11 @@ export const UsersManager = () => {
 
   return (
     <div>
-      {/* Заголовок и кнопка добавления */}
+      {/* Заголовок */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-gray-900">
           Сотрудники ({stats.total})
         </h2>
-        <button
-          onClick={handleAdd}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          Добавить сотрудника
-        </button>
       </div>
 
       {/* Панель фильтров */}
@@ -657,6 +672,9 @@ export const UsersManager = () => {
                                     <th className="px-3 py-1.5 text-center text-xs font-medium text-gray-500 uppercase w-16">
                                       Статус
                                     </th>
+                                    <th className="px-3 py-1.5 text-center text-xs font-medium text-gray-500 uppercase w-16">
+                                      Порядок
+                                    </th>
                                     <th className="px-3 py-1.5 text-right text-xs font-medium text-gray-500 uppercase w-24">
                                       Действия
                                     </th>
@@ -783,6 +801,16 @@ export const UsersManager = () => {
           onCancel={() => setIsModalOpen(false)}
         />
       </Modal>
+
+      {/* Плавающая кнопка добавления */}
+      <button
+        onClick={handleAdd}
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-200 hover:scale-105"
+        title="Добавить сотрудника"
+      >
+        <Plus className="w-5 h-5" />
+        <span className="font-medium">Добавить сотрудника</span>
+      </button>
     </div>
   );
 };

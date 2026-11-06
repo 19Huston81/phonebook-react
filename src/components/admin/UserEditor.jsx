@@ -75,7 +75,6 @@ export const UserEditor = ({
   const selectedDept = departments.find(
     (d) => d.id === Number(formData.department_id),
   );
-  const isChildSelected = selectedDept && selectedDept.parent_id !== 0;
 
   // Обработчик выбора филиала
   const handleFilialChange = (filialId) => {
@@ -98,24 +97,13 @@ export const UserEditor = ({
       return;
     }
 
-    const pid = Number(parentId);
-    const children = departments.filter((d) => d.parent_id === pid);
-
-    if (children.length === 0) {
-      // Если нет подотделов — выбираем сам родительский отдел
-      setFormData({
-        ...formData,
-        parent_id: parentId,
-        department_id: parentId,
-      });
-    } else {
-      // Если есть подотделы — ждём выбора подотдела
-      setFormData({
-        ...formData,
-        parent_id: parentId,
-        department_id: "",
-      });
-    }
+    // Всегда устанавливаем сам родительский отдел как выбранный по умолчанию.
+    // Пользователь может опционально выбрать подотдел ниже.
+    setFormData({
+      ...formData,
+      parent_id: parentId,
+      department_id: parentId,
+    });
   };
 
   // Обработчик выбора подотдела
@@ -213,12 +201,12 @@ export const UserEditor = ({
 
           {/* Подотдел */}
           <select
-            value={isChildSelected ? formData.department_id : ""}
+            value={formData.department_id}
             onChange={(e) => handleChildChange(e.target.value)}
             disabled={!formData.parent_id || childDepartments.length === 0}
             className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
           >
-            <option value="">— Подотдел —</option>
+            <option value={formData.parent_id}>— Без подотдела —</option>
             {childDepartments.map((child) => (
               <option key={child.id} value={child.id}>
                 {child.name || "(без названия)"}
@@ -352,7 +340,11 @@ export const UserEditor = ({
             value={formData.sort}
             onChange={(e) => setFormData({ ...formData, sort: e.target.value })}
             className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Авто"
           />
+          <p className="text-xs text-gray-500 mt-1">
+            Оставьте пустым для автозаполнения
+          </p>
         </div>
       </div>
 

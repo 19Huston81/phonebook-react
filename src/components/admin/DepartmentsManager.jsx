@@ -211,7 +211,25 @@ export const DepartmentsManager = () => {
     if (editingDepartment) {
       updateDepartment(editingDepartment.id, departmentData);
     } else {
-      addDepartment(departmentData);
+      let finalData = { ...departmentData };
+
+      // Автозаполнение при пустом значении ИЛИ при нуле
+      if (!finalData.sort || Number(finalData.sort) === 0) {
+        const filialId = finalData.filial_id;
+        const sameFilialDepartments = departments.filter(
+          (d) => d.filial_id === filialId,
+        );
+        const maxSort =
+          sameFilialDepartments.length > 0
+            ? Math.max(...sameFilialDepartments.map((d) => d.sort || 0))
+            : 0;
+
+        finalData.sort = maxSort + 10;
+      } else {
+        finalData.sort = parseInt(finalData.sort);
+      }
+
+      addDepartment(finalData);
     }
     setIsModalOpen(false);
   };
